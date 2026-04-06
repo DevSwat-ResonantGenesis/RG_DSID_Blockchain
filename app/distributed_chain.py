@@ -287,6 +287,32 @@ class DistributedBlockchain:
             if key not in self.state:
                 self.state[key] = []
             self.state[key].append(action)
+        
+        elif tx_type == "training_gradient":
+            # Record verified training gradient submission on chain
+            miner_id = tx.get("miner_id")
+            task_id = tx.get("task_id")
+            gradient_hash = tx.get("gradient_hash")
+            loss_value = tx.get("loss_value", 0.0)
+            samples = tx.get("samples_processed", 0)
+            reward = tx.get("reward_amount", 0)
+            
+            # Track miner's training contributions
+            miner_key = f"miner:{miner_id}:training"
+            if miner_key not in self.state:
+                self.state[miner_key] = {"tasks": 0, "samples": 0, "rewards": 0}
+            self.state[miner_key]["tasks"] += 1
+            self.state[miner_key]["samples"] += samples
+            self.state[miner_key]["rewards"] += reward
+            
+            # Record gradient hash for provenance
+            grad_key = f"gradient:{task_id}"
+            self.state[grad_key] = {
+                "miner_id": miner_id,
+                "gradient_hash": gradient_hash,
+                "loss": loss_value,
+                "samples": samples,
+            }
     
     def _handle_potential_fork(self, block: DistributedBlock):
         """Handle a potential chain fork."""

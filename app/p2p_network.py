@@ -33,6 +33,9 @@ class MessageType(Enum):
     TX_RESPONSE = "tx_response"
     CHAIN_SYNC = "chain_sync"
     CONSENSUS = "consensus"
+    TRAINING_TASK = "training_task"
+    GRADIENT_SUBMIT = "gradient_submit"
+    WEIGHT_SHARD = "weight_shard"
 
 
 @dataclass
@@ -113,6 +116,9 @@ class P2PNetwork:
         self._block_handler: Optional[Callable] = None
         self._tx_handler: Optional[Callable] = None
         self._consensus_handler: Optional[Callable] = None
+        self._training_task_handler: Optional[Callable] = None
+        self._gradient_handler: Optional[Callable] = None
+        self._weight_shard_handler: Optional[Callable] = None
     
     async def start(self):
         """Start P2P network."""
@@ -213,6 +219,21 @@ class P2PNetwork:
         elif msg.msg_type == MessageType.CONSENSUS:
             if self._consensus_handler:
                 return await self._consensus_handler(msg)
+        
+        elif msg.msg_type == MessageType.TRAINING_TASK:
+            if self._training_task_handler:
+                await self._training_task_handler(msg.payload)
+            if msg.ttl > 0:
+                msg.ttl -= 1
+                await self.broadcast(msg)
+        
+        elif msg.msg_type == MessageType.GRADIENT_SUBMIT:
+            if self._gradient_handler:
+                await self._gradient_handler(msg.payload)
+        
+        elif msg.msg_type == MessageType.WEIGHT_SHARD:
+            if self._weight_shard_handler:
+                await self._weight_shard_handler(msg.payload)
         
         return None
     
@@ -336,6 +357,21 @@ class P2PNetwork:
         msg = NetworkMessage(MessageType.TX_ANNOUNCE, self.node_id, {"transaction": tx})
         await self.broadcast(msg)
     
+    async def broadcast_training_task(self, task: Dict):
+        """Broadcast a training task to all miner peers."""
+        msg = NetworkMessage(MessageType.TRAINING_TASK, self.node_id, {"task": task})
+        await self.broadcast(msg)
+    
+    async def submit_gradient(self, peer: Peer, gradient_payload: Dict):
+        """Submit compressed gradient to a specific validator peer."""
+        msg = NetworkMessage(MessageType.GRADIENT_SUBMIT, self.node_id, gradient_payload)
+        return await self._send_to_peer(peer, msg)
+    
+    async def send_weight_shard(self, peer: Peer, shard_payload: Dict):
+        """Send model weight shard to a specific miner peer."""
+        msg = NetworkMessage(MessageType.WEIGHT_SHARD, self.node_id, shard_payload)
+        return await self._send_to_peer(peer, msg)
+    
     def set_block_handler(self, handler: Callable):
         self._block_handler = handler
     
@@ -344,6 +380,15 @@ class P2PNetwork:
     
     def set_consensus_handler(self, handler: Callable):
         self._consensus_handler = handler
+    
+    def set_training_task_handler(self, handler: Callable):
+        self._training_task_handler = handler
+    
+    def set_gradient_handler(self, handler: Callable):
+        self._gradient_handler = handler
+    
+    def set_weight_shard_handler(self, handler: Callable):
+        self._weight_shard_handler = handler
     
     def get_peer_count(self) -> int:
         return len(self.peers)

@@ -62,6 +62,9 @@ class AgentClass(Enum):
     CLASS_C = "coordinator"          # Manage multi-agent workflows
     CLASS_D = "advisory"             # Provide analysis, recommendations
     CLASS_E = "critical"             # Regulated sectors (finance, healthcare, gov)
+    CLASS_F = "validator_miner"      # Genesis validator — hosts Lighthouse nodes, 1.5x reward multiplier
+    CLASS_G = "core_miner"           # Core contributor miner — module maintainer, 1.25x multiplier
+    CLASS_H = "miner"                # Standard miner — training worker, 1.0x multiplier
 
 
 @dataclass
@@ -140,6 +143,36 @@ AGENT_CLASSIFICATIONS = {
         can_coordinate=False,
         audit_required=True,
         human_approval_required=True,
+    ),
+    AgentClass.CLASS_F: AgentClassification(
+        agent_class=AgentClass.CLASS_F,
+        description="Validator Miner - Genesis validator hosting Lighthouse/parameter server nodes",
+        governance_level="strict",
+        requires_supervision=False,
+        can_supervise=True,
+        can_coordinate=True,
+        audit_required=True,
+        human_approval_required=False,
+    ),
+    AgentClass.CLASS_G: AgentClassification(
+        agent_class=AgentClass.CLASS_G,
+        description="Core Miner - Module maintainer and Review Squad lead",
+        governance_level="moderate",
+        requires_supervision=False,
+        can_supervise=False,
+        can_coordinate=False,
+        audit_required=True,
+        human_approval_required=False,
+    ),
+    AgentClass.CLASS_H: AgentClassification(
+        agent_class=AgentClass.CLASS_H,
+        description="Miner - Standard training worker contributing GPU compute",
+        governance_level="standard",
+        requires_supervision=False,
+        can_supervise=False,
+        can_coordinate=False,
+        audit_required=False,
+        human_approval_required=False,
     ),
 }
 
