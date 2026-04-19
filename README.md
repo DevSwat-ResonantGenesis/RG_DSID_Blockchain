@@ -11,7 +11,7 @@
 
 > **Not to be confused with:**
 > - **RG_DSID_Node** — External decentralized node runtime (Base Sepolia, agent execution, P2P, port 8081)
-> - **RG_external_blockchain** — External chain bridges (Raft consensus, P2P gossip, block production)
+> - **RG_TrainingNet_Chain** — Training network chain (Raft consensus, P2P gossip, block production)
 
 ## Features
 
