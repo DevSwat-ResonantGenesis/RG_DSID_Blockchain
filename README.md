@@ -1,13 +1,17 @@
-# RG Blockchain
+# RG_DSID_Blockchain
 
-> **Part of the [ResonantGenesis](https://dev-swat.com) platform** — DSID-P hash lineage, transaction graph, audit chain, and Base Sepolia anchoring.
+> **Part of the [DevSwat](https://dev-swat.com) platform** — Internal DSID-P blockchain: hash lineage, transaction graph, audit chain, and Base Sepolia anchoring.
 
 [![Status: Production](https://img.shields.io/badge/Status-Production-brightgreen.svg)]()
 [![Port: 8000](https://img.shields.io/badge/Port-8000-orange.svg)]()
 [![Database: PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-336791.svg)]()
 [![License: RG Source Available](https://img.shields.io/badge/License-RG%20Source%20Available-blue.svg)](LICENSE.txt)
 
-Internal blockchain service for the ResonantGenesis platform. Manages DSID-P (Digital State Identity Protocol), hash lineage tracking, transaction graphs, audit chains, and external anchoring to Base Sepolia. Includes distributed consensus, smart contracts, ZK proofs, sharding, cross-chain bridges, and a crypto identity registry.
+**Internal** blockchain service for the platform. Manages DSID-P (Digital State Identity Protocol), hash lineage tracking, transaction graphs, audit chains, and merkle root anchoring to Base Sepolia.
+
+> **Not to be confused with:**
+> - **RG_DSID_Node** — External decentralized node runtime (Base Sepolia, agent execution, P2P, port 8081)
+> - **RG_external_blockchain** — External chain bridges (Raft consensus, P2P gossip, block production)
 
 ## Features
 
@@ -29,11 +33,11 @@ export DATABASE_URL="postgresql+asyncpg://user:pass@localhost:5432/blockchain"
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-## Deployment Status
+## Deployment
 
-- **Extracted from**: `genesis2026_production_backend/blockchain_service/`
-- **Server path**: `/home/deploy/RG_Blockchain`
+- **Server path**: `/home/deploy/RG_DSID_Blockchain`
 - **Docker service**: `blockchain_service`
+- **Container**: `blockchain_service` | **Port**: 8000
 
 ---
 **Organization**: [DevSwat-ResonantGenesis](https://github.com/DevSwat-ResonantGenesis) | **Platform**: [dev-swat.com](https://dev-swat.com)
