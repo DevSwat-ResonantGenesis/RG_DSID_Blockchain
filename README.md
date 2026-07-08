@@ -1,6 +1,6 @@
 # RG_DSID_Blockchain
 
-> **Part of the [DevSwat](https://resonant.dev-swat.com) platform** — Internal DSID-P blockchain: hash lineage, transaction graph, audit chain, and Base Sepolia anchoring.
+> **Part of the [DevSwat](https://dev-swat.com) platform** — Internal DSID-P blockchain: hash lineage, transaction graph, audit chain, and Base Sepolia anchoring.
 
 [![Status: Production](https://img.shields.io/badge/Status-Production-brightgreen.svg)]()
 [![Port: 8000](https://img.shields.io/badge/Port-8000-orange.svg)]()
@@ -40,4 +40,4 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 - **Container**: `blockchain_service` | **Port**: 8000
 
 ---
-**Organization**: [DevSwat-ResonantGenesis](https://github.com/DevSwat-ResonantGenesis) | **Platform**: [resonant.dev-swat.com](https://resonant.dev-swat.com)
+**Organization**: [DevSwat-ResonantGenesis](https://github.com/DevSwat-ResonantGenesis) | **Platform**: [dev-swat.com](https://dev-swat.com)
